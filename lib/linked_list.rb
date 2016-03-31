@@ -17,14 +17,6 @@ class LinkedList
     data
   end
 
-  def append_next_node(current_node, data)
-    if current_node.next_node.nil?
-      current_node.next_node = Node.new(data)
-    else
-      append_next_node(current_node.next_node, data)
-    end
-  end
-
   def count
     counter = 0
     if @head.nil?
@@ -35,54 +27,13 @@ class LinkedList
     end
   end
 
-  def count_next_node(current_node, counter)
-    if current_node.next_node.nil?
-      counter
-    else
-      counter += 1
-      count_next_node(current_node.next_node, counter)
-    end
-  end
-
   def to_string
-    if @head.nil?
-      ""
-    else
-      string_check_nodes(@head)
-    end
-  end
-
-  def string_check_nodes(current_node, beats_array = [])
-    if current_node.next_node.nil?
-      beats_array << current_node.data
-      beats_array.join(" ")
-    else
-      beats_array << current_node.data
-      string_check_nodes(current_node.next_node, beats_array)
-    end
+    @head.nil? ? "" : string_check_nodes(@head)
   end
 
   def insert(position, data)
-    if @head.nil?
-      "Not enough nodes"
-    else
-      insert_node(@head, position, data)
-    end
-  end
-
-  def insert_node(current_node, position, data, counter = 0)
-    if position - 1 == counter
-      insert_at_position(current_node, data)
-    else
-      counter += 1
-      insert_node(current_node.next_node, position, data, counter)
-    end
-  end
-
-  def insert_at_position(current_node, data)
-    temp_node = current_node.next_node
-    current_node.next_node = Node.new(data)
-    current_node.next_node.next_node = temp_node
+    return "Not enough nodes" if count < position
+    @head.nil? ? prepend(data) : insert_node(@head, position, data)
   end
 
   def prepend(data)
@@ -92,21 +43,7 @@ class LinkedList
   end
 
   def includes?(data)
-    if @head.data == data
-      true
-    else
-      includes_next(@head, data)
-    end
-  end
-
-  def includes_next(current_node, data)
-    if current_node == nil
-      false
-    elsif current_node.data == data
-      true
-    else
-      includes_next(current_node.next_node, data)
-    end
+    @head.data == data ? true : includes_next(@head, data)
   end
 
   def find(position, number_of_nodes)
@@ -116,30 +53,88 @@ class LinkedList
     beat_array.join(" ")
   end
 
-  def find_nodes(position, number_of_nodes, beat_array, counter, current_node)
-    if counter == position
-      number_of_nodes.times do
-        beat_array << current_node.data
-        current_node = current_node.next_node
-      end
-    else
-      counter += 1
-      find_nodes(position, number_of_nodes, beat_array, counter, current_node.next_node)
-    end
-  end
-
   def pop
     pop_helper(@head)
   end
 
-   def pop_helper(current_node)
-     if current_node.next_node.next_node == nil
-       node_removed = current_node.next_node.data
-       current_node.next_node = nil
-       node_removed
-     else
-       pop_helper(current_node.next_node)
-     end
-   end
+    private
+
+    def append_next_node(current_node, data)
+      if current_node.next_node.nil?
+        current_node.next_node = Node.new(data)
+      else
+        append_next_node(current_node.next_node, data)
+      end
+    end
+
+    def count_next_node(current_node, counter)
+      if current_node.next_node.nil?
+        counter
+      else
+        counter += 1
+        count_next_node(current_node.next_node, counter)
+      end
+    end
+
+    def string_check_nodes(current_node, beats_array = [])
+      if current_node.next_node.nil?
+        beats_array << current_node.data
+        beats_array.join(" ")
+      else
+        beats_array << current_node.data
+        string_check_nodes(current_node.next_node, beats_array)
+      end
+    end
+
+    def insert_node(current_node, position, data, counter = 0)
+      if position - 1 == counter
+        insert_at_position(current_node, data)
+      else
+        counter += 1
+        insert_node(current_node.next_node, position, data, counter)
+      end
+    end
+
+    def insert_at_position(current_node, data)
+      temp_node = current_node.next_node
+      current_node.next_node = Node.new(data)
+      current_node.next_node.next_node = temp_node
+    end
+
+    def includes_next(current_node, data)
+      if current_node == nil
+        false
+      elsif current_node.data == data
+        true
+      else
+        includes_next(current_node.next_node, data)
+      end
+    end
+
+    def find_nodes(position, number_of_nodes, beat_array, counter, current_node)
+      if counter == position
+        number_of_nodes.times do
+          beat_array << current_node.data
+          current_node = current_node.next_node
+        end
+      else
+        counter += 1
+        find_nodes(position, number_of_nodes, beat_array, counter, current_node.next_node)
+      end
+    end
+
+    def pop_helper(current_node)
+      if current_node.next_node.next_node == nil
+        removing_node(current_node)
+      else
+        pop_helper(current_node.next_node)
+      end
+    end
+
+    def removing_node(current_node)
+      node_removed = current_node.next_node.data
+      current_node.next_node = nil
+      node_removed
+    end
 
 end

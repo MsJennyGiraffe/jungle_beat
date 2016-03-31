@@ -61,6 +61,11 @@ class LinkedListTest < Minitest::Test
     assert_equal "beep boop shi shoe", @list.to_string
   end
 
+  def test_insert_can_insert_at_zeroth_position
+    @list.insert(0, "beep")
+    assert_equal "beep", @list.to_string
+  end
+
   def test_insert_creates_a_node_and_places_it_after_the_position_being_called
     append_nodes(["beep", "boop", "shi", "shoe"])
     @list.insert(1, "hello")
@@ -77,6 +82,10 @@ class LinkedListTest < Minitest::Test
     append_nodes(["beep", "boop", "shi", "shoe"])
     @list.insert(3, "hello")
     assert_equal "beep boop shi hello shoe", @list.to_string
+  end
+
+  def test_insert_returns_an_error_if_not_enough_nodes
+    assert_equal "Not enough nodes", @list.insert(1, 2)
   end
 
   def test_prepend_sets_node_as_head_and_shifts_all_other_nodes
