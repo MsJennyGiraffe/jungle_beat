@@ -85,7 +85,7 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_insert_returns_an_error_if_not_enough_nodes
-    assert_equal "Not enough nodes", @list.insert(1, 2)
+    assert_equal "Not enough nodes", @list.insert(1, "data")
   end
 
   def test_prepend_sets_node_as_head_and_shifts_all_other_nodes

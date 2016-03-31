@@ -15,7 +15,6 @@ class JungleBeats
   end
 
   def play(rate = 500, voice = "Boing")
-    # different_settings(rate, voice)
     beats = @list.to_string
     `say -r #{rate} -v #{voice} #{beats}`
   end
@@ -24,6 +23,5 @@ class JungleBeats
     rate = rate
     voice = voice
   end
-
 
 end
